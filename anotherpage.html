@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Phone Book</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .button {
+            background-color: #4CAF50; /* Green background */
+            border: none; /* No border */
+            color: white; /* White text */
+            padding: 15px 32px; /* Padding for button */
+            text-align: center; /* Center text */
+            text-decoration: none; /* No underline */
+            display: inline-block; /* Inline block for spacing */
+            font-size: 16px; /* Font size */
+            margin: 4px 2px; /* Margins for spacing */
+            cursor: pointer; /* Pointer cursor on hover */
+            border-radius: 10px; /* Rounded corners */
+        }
+        .button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+    .container {
+      width: 500px;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .profile-section {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    #profile-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+    }
+
+    .notification {
+      position: absolute;
+      top: 5px;
+      right: 120px;
+      background-color: red;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .input-group {
+      margin: 10px 0;
+    }
+
+    .input-group input {
+      padding: 8px;
+      width: 70%;
+      margin-right: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .input-group button {
+      padding: 8px 12px;
+      border: none;
+      background-color: rgb(109, 215, 253);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="text"]:focus {
+      border-color: rgb(109, 215, 253);
+    }
+
+    table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>My Phone Book</h1>
+    <div class="profile-section">
+      <img id="profile-img" src="https://e7.pngegg.com/pngimages/753/432/png-clipart-user-profile-2018-in-sight-user-conference-expo-business-default-business-angle-service-thumbnail.png" alt="Profile" />
+      <span class="notification">1</span>
+    </div>
+
+    <div class="input-group">
+      <label for="username">Set the Username</label>
+      <input type="text" id="username" placeholder="Enter Username" />
+      <button onclick="setUsername()">SET</button>
+    </div>
+
+    <div class="input-group">
+      <label for="image-url">Set the profile image URL</label>
+      <input type="text" id="image-url" placeholder="Enter Image URL" />
+      <button onclick="setImageUrl()">SET</button>
+    </div>
+
+    <h2>Phone Number List</h2>
+    <div class="input-group">
+      <input type="text" id="name" placeholder="Name" />
+      <input type="text" id="phone" placeholder="Tel" />
+      <button onclick="addContact()">ADD</button>
+      <button onclick="exportContacts()">EXPORT</button>
+    </div>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Name</th>
+          <th>Phone Number</th>
+        </tr>
+      </thead>
+      <tbody id="contact-list">
+        <tr>
+          <td>1</td>
+          <td>Hello Kitty</td>
+          <td>0987654321</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Little Pony</td>
+          <td>0456789123</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Baby Carrot</td>
+          <td>0123456789</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function setUsername() {
+      const usernameInput = document.getElementById('username').value;
+      if (usernameInput) {
+        alert(`Username set to: ${usernameInput}`);
+      }
+    }
+
+    function setImageUrl() {
+      const imageUrl = document.getElementById('image-url').value;
+      const profileImg = document.getElementById('profile-img');
+      if (imageUrl) {
+        profileImg.src = imageUrl;
+      }
+    }
+
+    function addContact() {
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const contactList = document.getElementById('contact-list');
+
+      if (name && phone) {
+        const row = contactList.insertRow();
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+
+        cell1.textContent = contactList.rows.length;
+        cell2.textContent = name;
+        cell3.textContent = phone;
+
+        document.getElementById('name').value = '';
+        document.getElementById('phone').value = '';
+      }
+    }
+
+    function exportContacts() {
+      const table = document.querySelector('table');
+      const rows = Array.from(table.rows)
+        .map(row => Array.from(row.cells).map(cell => cell.textContent).join(','))
+        .join('\n');
+
+      const blob = new Blob([rows], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'contacts.csv';
+      link.click();
+    }
+  </script>
+<div class=".button">
+  <a href="index.html" class="button">Back to Home</a>
+</div>
+</body>
+</html>
